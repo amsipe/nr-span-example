@@ -1,0 +1,19 @@
+version: '3.7'
+services:
+  api:
+    container_name: api
+    build: .
+    ports:
+      - '5500:5500'
+    depends_on:
+      - exampledb
+    command: ["./wait-for-it.sh", "./nr-span-example"]
+  exampledb:
+    image: mysql:5.7
+    restart: always
+    hostname: example.db
+    container_name: example.db
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    volumes:
+      - ./ddl/schema.sql:/docker-entrypoint-initdb.d/schema.sql
